@@ -59,7 +59,17 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         this._navigationService.navigation$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((navigation: Navigation) => {
+                navigation.default.push(
+                    {
+                        "id": "example2",
+                        "title": "Testando Example",
+                        "type": "basic",
+                        "icon": "heroicons_outline:chart-pie",
+                        "link": "/testando-example"
+                    }
+                )
                 this.navigation = navigation;
+                console.log(this.navigation);
             });
 
         // Subscribe to the user service
