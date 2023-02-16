@@ -4,6 +4,7 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { Subject, takeUntil } from 'rxjs';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
     selector       : 'user',
@@ -44,7 +45,9 @@ export class UserComponent implements OnInit, OnDestroy
     ngOnInit(): void
     {
         // Subscribe to user changes
-        this.user = JSON.parse(localStorage.getItem('userSession') ?? '');
+        let token = localStorage.getItem('accessToken');
+        let tokenDecodificado: any = jwt_decode.default(token);
+        this.user = tokenDecodificado.usuarioRetorno;
     }
 
     /**

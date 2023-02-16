@@ -56,10 +56,12 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-        this.carregarMenusAplicacao();        
+        this.carregarMenusAplicacao();
 
         // Subscribe to the user service
-        this.user = JSON.parse(localStorage.getItem('userSession') ?? '');
+        let token = localStorage.getItem('accessToken');
+        let tokenDecodificado: any = jwt_decode.default(token);
+        this.user = tokenDecodificado.usuarioRetorno;
 
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
@@ -102,9 +104,9 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         }
     }
 
-    carregarMenusAplicacao(): void {        
+    carregarMenusAplicacao(): void {
         let token = localStorage.getItem('accessToken');
         let tokenDecodificado: any = jwt_decode.default(token);
-        this.navigation = tokenDecodificado.menus;    
+        this.navigation = tokenDecodificado.usuarioRetorno.menus;
     }
 }

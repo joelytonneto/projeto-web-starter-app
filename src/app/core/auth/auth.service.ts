@@ -5,6 +5,7 @@ import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
 import { environment } from 'environments/environment';
+import * as jwt_decode from 'jwt-decode';
 
 @Injectable()
 export class AuthService {
@@ -32,18 +33,6 @@ export class AuthService {
 
     get accessToken(): string {
         return localStorage.getItem('accessToken') ?? '';
-    }
-
-    /**
-     * Setter & getter for User
-     */
-    set userSession(user: User) {
-        localStorage.setItem('userSession', JSON.stringify(user));
-    }
-
-    get userSession(): User {
-        let objUserSession = localStorage.getItem('userSession') ?? '';
-        return JSON.parse(objUserSession);
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -89,10 +78,10 @@ export class AuthService {
                     // Set the authenticated flag to true
                     this._authenticated = true;
 
-                    
                     // Store the user on the user service
-                    this.userSession = response.user;
-                    this._userService.user = response.user;
+                    let token = localStorage.getItem('accessToken');
+                    let tokenDecodificado: any = jwt_decode.default(token);
+                    this._userService.user = tokenDecodificado.usuarioRetorno;
 
                     // Return a new observable with the response
                     return of(response);
@@ -129,8 +118,11 @@ export class AuthService {
                     // Set the authenticated flag to true
                     this._authenticated = true;
 
+
                     // Store the user on the user service
-                    this._userService.user = response.user;
+                    let token = localStorage.getItem('accessToken');
+                    let tokenDecodificado: any = jwt_decode.default(token);
+                    this._userService.user = tokenDecodificado.usuarioRetorno;
 
                     // Return true
                     return of(true);
