@@ -7,6 +7,7 @@ import { Navigation } from 'app/core/navigation/navigation.types';
 import { NavigationService } from 'app/core/navigation/navigation.service';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
     selector     : 'classy-layout',
@@ -55,22 +56,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-        // Subscribe to navigation data
-        this._navigationService.navigation$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((navigation: Navigation) => {
-                navigation.default.push(
-                    {
-                        "id": "example2",
-                        "title": "Testando Example",
-                        "type": "basic",
-                        "icon": "heroicons_outline:chart-pie",
-                        "link": "/testando-example"
-                    }
-                )
-                this.navigation = navigation;
-                console.log(this.navigation);
-            });
+        this.carregarMenusAplicacao();        
 
         // Subscribe to the user service
         this.user = JSON.parse(localStorage.getItem('userSession') ?? '');
@@ -114,5 +100,11 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
             // Toggle the opened status
             navigation.toggle();
         }
+    }
+
+    carregarMenusAplicacao(): void {        
+        let token = localStorage.getItem('accessToken');
+        let tokenDecodificado: any = jwt_decode.default(token);
+        this.navigation = tokenDecodificado.menus;    
     }
 }
