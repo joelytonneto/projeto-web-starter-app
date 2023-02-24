@@ -1,4 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { Menu } from 'app/interfaces/menu';
+import { MenuService } from 'app/services/menu.service';
 
 @Component({
     selector     : 'example',
@@ -7,10 +9,10 @@ import { Component, ViewEncapsulation } from '@angular/core';
 })
 export class ExampleComponent
 {
-    /**
-     * Constructor
-     */
-    constructor()
-    {
+    constructor(private menuService: MenuService){}
+
+    async ngOnInit() {
+        let menu: Array<Menu> = await this.menuService.listar();
+        console.log(menu);
     }
 }
