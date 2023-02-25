@@ -72,6 +72,8 @@ export const appRoutes: Route[] = [
         },
         children: [
             {path: 'example', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule)},
+            {path: 'usuarios', loadChildren: () => import('app/modules/admin/pages/administrador/controle-acesso/controle-acesso.module').then(m => m.ControleAcessoModule)},
+            {path: 'perfil', loadChildren: () => import('app/modules/admin/pages/administrador/ecommerce/ecommerce.module').then(m => m.ECommerceModule)},
         ]
     }
 ];

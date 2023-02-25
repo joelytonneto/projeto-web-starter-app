@@ -1,0 +1,15 @@
+.inventory-grid {
+  grid-template-columns: 9% 18% 18% 18% 18% 9% 9%;
+
+  @screen sm {
+      grid-template-columns: 9% 18% 18% 18% 18% 9% 9%;
+  }
+
+  @screen md {
+      grid-template-columns: 9% 18% 18% 18% 18% 9% 9%;
+  }
+
+  @screen lg {
+      grid-template-columns: 9% 18% 18% 18% 18% 9% 9%;
+  }
+}

@@ -1,0 +1,95 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+    <!-- Header -->
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+        <div class="text-3xl font-extrabold tracking-tight">Cadastro de Usuários</div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex flex-col overflow-hidden">
+        <form class="flex flex-col mt-4 px-8 pt-10 bg-card shadow rounded overflow-hidden" [formGroup]="usuarioForm">
+            <div class="flex flex-col gt-xs:flex-row gt-xs:items-start">
+                <div class="flex">
+                    <mat-form-field class="flex-auto pr-4">
+                        <mat-label>Nome</mat-label>
+                        <input 
+                            matInput
+                            [formControlName]="'name'"
+                            [placeholder]="'Digite o nome do usuário'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Login</mat-label>
+                        <input
+                            matInput
+                            [formControlName]="'user'"
+                            [placeholder]="'Digite um nome de usuário para realizar o login'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto pr-4">
+                        <mat-label>E-mail</mat-label>
+                        <input
+                            matInput
+                            [formControlName]="'email'"
+                            [placeholder]="'Digite o e-mail do usuário'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Senha</mat-label>
+                        <input
+                            matInput
+                            [formControlName]="'password'"
+                            type="password"
+                            [placeholder]="'Digite uma senha para ser utilizado no login'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto pr-4">
+                        <mat-label>Avatar</mat-label>
+                        <input
+                            matInput
+                            [formControlName]="'avatar'"
+                            [placeholder]="'Insira o avatar a ser utilizado pelo usuário'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Status</mat-label>
+                        <input
+                            matInput
+                            [formControlName]="'status'"
+                            [placeholder]="'Insira o status do usuário'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Perfil Acesso</mat-label>
+                        <input
+                            matInput
+                            [formControlName]="'id_perfil_acesso'"
+                            [placeholder]="'Selecione um perfil de acesso para o usuário'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                </div>
+
+                <div class="flex items-center justify-end">
+                    <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="cadastrarNovoUsuario()">
+                        Save
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>
