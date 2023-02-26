@@ -1,0 +1,15 @@
+.menu-grid {
+      grid-template-columns: 9% 14% 13% 14% 18% 9% 9% 13%;
+
+  @screen sm {
+            grid-template-columns: 9% 14% 13% 14% 18% 9% 9% 13%;
+  }
+
+  @screen md {
+            grid-template-columns: 9% 14% 13% 14% 18% 9% 9% 13%;
+  }
+
+  @screen lg {
+            grid-template-columns: 9% 14% 13% 14% 18% 9% 9% 13%;
+  }
+}

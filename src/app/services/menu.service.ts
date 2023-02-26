@@ -16,6 +16,16 @@ export class MenuService implements CrudInterface {
     constructor(private http: HttpService) {}
 
     /**
+     * Endpoint responsável por buscar menu por ID
+     *
+     * @return {*} {Promise<Menu>}
+     * @memberof MenuService
+     */
+    public async buscarPorId(idMenu): Promise<Menu> {
+        return await this.http.get(`menu/menus/${idMenu}`);
+    }
+    
+    /**
      * Endpoint responsável por listar todos os menus
      *
      * @return {*} {Promise<Array<Menu>>}
