@@ -13,8 +13,11 @@ import { Menu } from 'app/interfaces/menu';
 })
 export class MenuFormComponent
 {
+    idMenuUrl: number;
+    menusPais: any = [];
     alertaSucesso = false;
     alertaErro = false;
+    alertaErroFormulario = false;
     labelBotao = 'Salvar';
     menuForm: UntypedFormGroup;
 
@@ -25,65 +28,66 @@ export class MenuFormComponent
     {
     }
 
-    ngOnInit(): void {        
-
+    async ngOnInit() {        
         this.menuForm = this._formBuilder.group({
-            id_menu      : [null],
-            id           : [null],
-            title        : [null],
+            id_menu      : [{value: null, disabled: true}],
+            id           : [null, Validators.required],
+            title        : [null, Validators.required],
             subtitle     : [null],
-            type         : [null],
+            type         : [null, Validators.required],
             icon         : [null],
-            link         : [null],
+            link         : [null, Validators.required],
             id_sistema   : [null],
-            has_sub_menu : [null],
+            has_sub_menu : [false],
             parent_id    : [null],
             ordem        : [null],
-            createdAt    : [null],
-            updatedAt    : [null]
+            createdAt    : [{value: null, disabled: true}],
+            updatedAt    : [{value: null, disabled: true}]
         });
-
+        
         this._route.params.subscribe(params => {
-            const idMenu = params['id'];
-            if(idMenu > 0) {
+            this.idMenuUrl = params['id'];
+            if(this.idMenuUrl > 0) {
                 this.labelBotao = 'Atualizar'
-                this.consultarMenuById(idMenu);
+                this.consultarMenuById(this.idMenuUrl);
             }
         });
+        
+        this.menusPais = await this.carregarMenusPais();
     }
 
     async cadastrarAtualizarMenu() {
         
-        if (this.menuForm.invalid) {
-            return console.log('Formulário Inválido');
-        }
-
-        if(this.labelBotao == 'Salvar') {
-            try {
-                await this.menuService.adicionar(this.menuForm.value);
-                this.alertaSucesso = true;            
+        if (this.menuForm.invalid) {            
+            this.alertaErroFormulario = true;
                 setTimeout(() => {
+                    this.alertaErroFormulario = false;
+            }, 5000);
+        } else {
+            if(this.labelBotao == 'Salvar') {
+                try {
+                    await this.menuService.adicionar(this.menuForm.value);
+                    this.alertaSucesso = true;            
+                    this.menuForm.disable();
+                    setTimeout(() => {                        
+                        this._router.navigate(['controle-acesso/menus']);                
+                    }, 3000);
+                } catch (error) {
+                    console.log(error);
+                    this.alertaErro = true;
+                    setTimeout(() => {
+                        this.alertaErro = false;
+                    }, 5000);                                
+                }
+            } else if(this.labelBotao == 'Atualizar') {
+                let menu = await this.menuService.atualizarById(this.menuForm.value, this.idMenuUrl);
+                this.alertaSucesso = true;                
+                this.menuForm.disable();
+                setTimeout(() => {                    
                     this._router.navigate(['controle-acesso/menus']);                
                 }, 3000);
-            } catch (error) {
-                console.log(error);
-                this.alertaErro = true;
-                setTimeout(() => {
-                    this.alertaErro = false;
-                }, 5000);                                
             }
-        } else if(this.labelBotao == 'Atualizar') {
-            let menu = await this.menuService.atualizar(this.menuForm.value);
-            this.alertaSucesso = true;
-            console.log('Menu Atualizado');
-            console.log(menu);
-            setTimeout(() => {
-                this._router.navigate(['controle-acesso/menus']);                
-            }, 3000);
-        }
-
-        // Disable the form
-        // this.usuarioForm.disable();
+        }        
 
     }
 
@@ -106,5 +110,19 @@ export class MenuFormComponent
         this.menuForm.controls['ordem'].setValue(menu.ordem);
         this.menuForm.controls['createdAt'].setValue(menu.createdAt);
         this.menuForm.controls['updatedAt'].setValue(menu.updatedAt);        
+    }
+
+    async carregarMenusPais() {
+        let menus = await this.menuService.listar();
+        let menusPais = menus.filter(menu => {
+            return (menu.parent_id == null && menu.has_sub_menu)
+        });
+        let menusPaisSelect = menusPais.map(menu => {
+            return {
+                id_menu: menu.id_menu,
+                title: menu.title
+            };
+        })
+        return menusPaisSelect; 
     }
 }

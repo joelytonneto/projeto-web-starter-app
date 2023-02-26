@@ -47,6 +47,17 @@ export class MenuService implements CrudInterface {
     }
 
     /**
+     * Endpoint responsável por atualizar um menu
+     *
+     * @param {*} menu
+     * @return {*}
+     * @memberof MenuService
+     */
+    public async atualizarById(menu, idMenu) {
+        return await this.http.put(`menu/menus/${idMenu}`, menu);
+    }
+
+    /**
      * Endpoint responsável por adicionar um novo menu
      *
      * @param {*} menu

@@ -10,9 +10,14 @@
         Você será direcionado para a lista de menus cadastrados
     </fuse-alert>
 
-    <fuse-alert [type]="'success'" *ngIf="alertaErro">
+    <fuse-alert [type]="'error'" *ngIf="alertaErro">
         <span fuseAlertTitle>Falha ao inserir/atualizar Menu</span>
         Ops! Não foi possível inserir ou atualizar o menu, por favor verifique o log de erro
+    </fuse-alert>
+
+    <fuse-alert [type]="'error'" *ngIf="alertaErroFormulario">
+        <span fuseAlertTitle>Informações Formulário</span>
+        Ops! Existem informações obrigatórias a serem preenchidas no formulário, preencha e depois tente salvar novamente
     </fuse-alert>
 
     <!-- Main -->
@@ -20,14 +25,21 @@
         <form class="flex flex-col mt-4 px-8 pt-10 bg-card shadow rounded overflow-hidden" [formGroup]="menuForm">
             <div class="flex flex-col gt-xs:flex-row gt-xs:items-start">
                 <div class="flex">
-                    <mat-form-field class="flex-auto">
+                    <mat-form-field class="flex-col-6 mr-4" *ngIf="labelBotao == 'Atualizar'">
                         <mat-label>ID</mat-label>
                         <input 
                             matInput
                             [formControlName]="'id_menu'"
                         >
                         <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
-                    </mat-form-field>                    
+                    </mat-form-field>
+                    <mat-checkbox class="mb-4"
+                            [formControlName]="'has_sub_menu'"
+                            [labelPosition]="'after'"
+                            [color]="'primary'"
+                        >
+                            Tem Sub Menu?
+                    </mat-checkbox>
                 </div>
                 <div class="flex">
                     <mat-form-field class="flex-auto">
@@ -61,11 +73,11 @@
                 <div class="flex">
                     <mat-form-field class="flex-auto">
                         <mat-label>Tipo</mat-label>
-                        <input
-                            matInput
-                            [formControlName]="'type'"
-                            [placeholder]="'Informe qual o tipo do menu'"
-                        >
+                        <mat-select placeholder="Tipo de Menu" formControlName="type">
+                            <mat-option value="basic">Menu Básico</mat-option>
+                            <mat-option value="group">Agrupador de Menus</mat-option>
+                            <mat-option value="collapsable">Menu pai com submenus</mat-option>
+                        </mat-select>
                         <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
                     </mat-form-field>
                     <mat-form-field class="flex-auto ml-4">
@@ -98,35 +110,38 @@
                         <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
                     </mat-form-field>
                     <mat-form-field class="flex-auto ml-4">
-                        <mat-label>Tem Sub Menu?</mat-label>
-                        <input
-                            matInput
-                            [formControlName]="'has_sub_menu'"
-                            [placeholder]="'Informe se o menu poderá ter submenus'"
-                        >
-                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
-                    </mat-form-field>
-                    <mat-form-field class="flex-auto ml-4">
-                        <mat-label>ID Menu Pai</mat-label>
-                        <input
-                            matInput
+                        <mat-label>Menu Pai</mat-label>
+                        <mat-select
                             [formControlName]="'parent_id'"
-                            [placeholder]="'Informe o ID do Menu Pai caso esse seja um submenu ou faça parte de um grupo de menu'"
+                            [placeholder]="'Selecione o menu pai'"
                         >
+                            <mat-option *ngFor="let menu of menusPais;" value="{{ menu.id_menu }}">{{ menu.title }}</mat-option>
+                        </mat-select>
                         <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
                     </mat-form-field>
                     <mat-form-field class="flex-auto ml-4">
                         <mat-label>Ordem</mat-label>
-                        <input
-                            matInput
+                        <mat-select
                             [formControlName]="'ordem'"
-                            [placeholder]="'Informe a ordem que esse menu será exibido'"
+                            [placeholder]="'Ordem a ser exibida'"
                         >
+                            <mat-option value=1>1</mat-option>
+                            <mat-option value=2>2</mat-option>
+                            <mat-option value=3>3</mat-option>
+                            <mat-option value=4>4</mat-option>
+                            <mat-option value=5>5</mat-option>
+                            <mat-option value=6>6</mat-option>
+                            <mat-option value=7>7</mat-option>
+                            <mat-option value=8>8</mat-option>
+                            <mat-option value=9>9</mat-option>
+                            <mat-option value=10>10</mat-option>
+                        </mat-select>                        
                         <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
                     </mat-form-field>
+                    
                 </div>
 
-                <div class="flex">                    
+                <div class="flex" *ngIf="labelBotao == 'Atualizar'">                    
                     <mat-form-field class="flex-auto">
                         <mat-label>Criado em:</mat-label>
                         <input

@@ -6,6 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MenuListComponent } from './menu/list/menu-list.component';
 import { MenuFormComponent } from './menu/form/menu-form.component';
 import { FuseAlertModule } from '@fuse/components/alert';
@@ -20,6 +22,8 @@ import { FuseAlertModule } from '@fuse/components/alert';
         MatButtonModule,
         MatIconModule,
         MatInputModule,
+        MatSelectModule,
+        MatCheckboxModule,
         FuseAlertModule
     ]
 })
