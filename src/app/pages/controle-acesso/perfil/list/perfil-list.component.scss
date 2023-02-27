@@ -1,0 +1,15 @@
+.perfil-grid {
+      grid-template-columns: 11% 63% 16% 23%;
+
+  @screen sm {
+            grid-template-columns: 11% 63% 16% 23%;
+  }
+
+  @screen md {
+            grid-template-columns: 11% 63% 16% 23%;
+  }
+
+  @screen lg {
+            grid-template-columns: 11% 63% 16% 23%;
+  }
+}

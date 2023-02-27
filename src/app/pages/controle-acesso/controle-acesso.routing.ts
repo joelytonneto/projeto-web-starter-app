@@ -4,6 +4,8 @@ import { MenuFormComponent } from './menu/form/menu-form.component';
 import { MenuListComponent } from './menu/list/menu-list.component';
 import { UsuarioFormComponent } from './usuario/form/usuario-form.component';
 import { UsuarioListComponent } from './usuario/list/usuario-list.component';
+import { PerfilFormComponent } from './perfil/form/perfil-form.component';
+import { PerfilListComponent } from './perfil/list/perfil-list.component';
 
 const controleAcessoRoutes: Route[] = [
   {
@@ -25,7 +27,7 @@ const controleAcessoRoutes: Route[] = [
           path     : 'atualizar/:id',
           component: MenuFormComponent,
       }
-    ]    
+    ]
   },
   {
     path     : 'usuarios',
@@ -42,7 +44,24 @@ const controleAcessoRoutes: Route[] = [
           path     : 'atualizar/:id',
           component: UsuarioFormComponent,
       }
-    ]    
+    ]
+  },
+  {
+    path     : 'perfis',
+    children : [
+      {
+          path     : '',
+          component: PerfilListComponent
+      },
+      {
+          path     : 'novo',
+          component: PerfilFormComponent,
+      },
+      {
+          path     : 'atualizar/:id',
+          component: PerfilFormComponent,
+      }
+    ]
   },
 ];
 

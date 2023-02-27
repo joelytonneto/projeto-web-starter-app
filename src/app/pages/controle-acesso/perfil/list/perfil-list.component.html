@@ -7,83 +7,71 @@
             <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
         </div>
         <!-- Título -->
-        <div class="text-4xl font-extrabold tracking-tight">Usuários</div>
+        <div class="text-4xl font-extrabold tracking-tight">Perfis</div>
         <!-- Ações -->
         <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
             <!-- Pesquisa -->
             <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
                 <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Procure os usuários'">
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Procure os perfis'">
             </mat-form-field>
-            <!-- Add usuário button -->
-            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="novoUsuario()">
+            <!-- Add perfil button -->
+            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="novoPerfil()">
                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                <span class="ml-2 mr-1">Cadastrar Novo Usuário</span>
+                <span class="ml-2 mr-1">Cadastrar Novo Perfil</span>
             </button>
         </div>
     </div>
 
     <fuse-alert [type]="'success'" *ngIf="alertaSucesso">
-        <span fuseAlertTitle>Exclusão de Usuário</span>
-        Usuário excluído com sucesso
+        <span fuseAlertTitle>Exclusão de Perfil</span>
+        Perfil excluído com sucesso
     </fuse-alert>
 
     <fuse-alert [type]="'error'" *ngIf="alertaErro">
-        <span fuseAlertTitle>Usuário não excluído</span>
-        Não foi possível a exclusão do usuário
+        <span fuseAlertTitle>Perfil não excluído</span>
+        Não foi possível a exclusão do perfil
     </fuse-alert>
 
     <!-- Main -->
     <div class="flex flex-auto overflow-hidden">
 
-        <!-- Lista de Usuários -->
+        <!-- Lista de Perfis -->
         <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
 
-            <ng-container *ngIf="usuarios.length > 0; else usuariosNaoEncontrados">
+            <ng-container *ngIf="perfis.length > 0; else perfisNaoEncontrados">
                 <div class="grid">
                     <!-- Header -->
-                    <div class="usuario-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5" matSort matSortDisableClear>
+                    <div class="perfil-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5" matSort matSortDisableClear>
                         <div class="hidden md:block" [mat-sort-header]="'id'">ID</div>
-                        <div class="hidden md:block" [mat-sort-header]="'name'">Nome</div>
-                        <div class="hidden md:block" [mat-sort-header]="'title'">Usuário</div>
-                        <div class="hidden md:block" [mat-sort-header]="'type'">E-mail</div>
-                        <div class="hidden md:block" [mat-sort-header]="'link'">Perfil</div>
+                        <div class="hidden md:block" [mat-sort-header]="'descricao'">Descrição</div>
+                        <div class="hidden md:block" [mat-sort-header]="'ativo'">Ativo</div>
                         <div>Ações</div>
                     </div>
                     <!-- Rows -->
-                    <ng-container *ngFor="let usuario of usuarios; trackBy: trackByFn">
-                        <div class="usuario-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                    <ng-container *ngFor="let perfil of perfis; trackBy: trackByFn">
+                        <div class="perfil-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 
-                            <!-- ID Usuário -->
+                            <!-- ID Perfil -->
                             <div class="hidden md:block truncate">
-                                {{usuario.id}}
+                                {{perfil.id}}
                             </div>
 
-                            <!-- Nome -->
+                            <!-- Descrição -->
                             <div class="hidden md:block truncate">
-                                {{usuario.name}}
+                                {{perfil.descricao}}
                             </div>
 
-                            <!-- Usuário -->
+                            <!-- Ativo -->
                             <div class="truncate">
-                                {{usuario.user}}
-                            </div>
-
-                            <!-- E-mail -->
-                            <div class="truncate">
-                                {{usuario.email}}
-                            </div>
-
-                            <!-- Perfil -->
-                            <div class="truncate">
-                                {{perfisAcessoMap ? perfisAcessoMap.get(usuario.id_perfil_acesso).descricao : ''}}
+                                {{perfil.ativo ? 'SIM' : 'NÃO'}}
                             </div>
 
                             <div>
                                 <button
                                     class="min-w-10 min-h-7 h-7 px-2 leading-6 mr-1"
                                     mat-stroked-button
-                                    (click)="editarUsuario(usuario.id)">
+                                    (click)="editarPerfil(perfil.id)">
                                     <mat-icon
                                         class="icon-size-5"
                                         [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
@@ -91,7 +79,7 @@
                                 <button
                                     class="min-w-10 min-h-7 h-7 px-2 leading-6"
                                     mat-stroked-button
-                                    (click)="excluirUsuario(usuario.id)">
+                                    (click)="excluirPerfil(perfil.id)">
                                     <mat-icon
                                         class="icon-size-5"
                                         [svgIcon]="'heroicons_solid:trash'"></mat-icon>
@@ -115,8 +103,8 @@
 
             </ng-container>
 
-            <ng-template #usuariosNaoEncontrados>
-                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Não existem usuários cadastrados!</div>
+            <ng-template #perfisNaoEncontrados>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Não existem perfis cadastrados!</div>
             </ng-template>
 
         </div>

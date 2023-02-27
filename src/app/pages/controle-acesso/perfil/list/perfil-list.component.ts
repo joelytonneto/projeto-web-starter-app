@@ -2,19 +2,17 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { Usuario } from 'app/interfaces/usuario';
-import { UsuarioService } from 'app/services/usuario.service';
+import { PerfilUsuario } from 'app/interfaces/perfilUsuario';
 import { PerfilUsuarioService } from 'app/services/perfilUsuario.service';
 
 @Component({
-    selector     : 'usuario-list',
-    templateUrl  : './usuario-list.component.html',
-    styleUrls  : ['./usuario-list.component.scss'],
+    selector     : 'perfil-list',
+    templateUrl  : './perfil-list.component.html',
+    styleUrls  : ['./perfil-list.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class UsuarioListComponent
+export class PerfilListComponent
 {
-    perfisAcessoMap = new Map();
     alertaSucesso = false;
     alertaErro = false;
     isLoading = false;
@@ -22,29 +20,27 @@ export class UsuarioListComponent
 
     pagination: any;
 
-    usuarios: Array<Usuario> = [];
-    constructor(private usuarioService: UsuarioService,
-                private perfilUsuarioService: PerfilUsuarioService,
+    perfis: Array<PerfilUsuario> = [];
+    constructor(private perfilUsuarioService: PerfilUsuarioService,
                 private _router: Router,
                 private _fuseConfirmationService: FuseConfirmationService){}
 
     async ngOnInit() {
-        await this.listarPerfis();
-        await this.listarUsuariosComPaginacao();
+        this.listarPerfisComPaginacao();
     }
 
-    novoUsuario() {
-        this._router.navigate(['controle-acesso/usuarios/novo']);
+    novoPerfil() {
+        this._router.navigate(['controle-acesso/perfis/novo']);
     }
 
-    editarUsuario(id) {
-        this._router.navigate(['controle-acesso/usuarios/atualizar', id]);
+    editarPerfil(id) {
+        this._router.navigate(['controle-acesso/perfis/atualizar', id]);
     }
 
-    async excluirUsuario(id) {
+    async excluirPerfil(id) {
         const confirmation = this._fuseConfirmationService.open({
-            title  : 'Excluir usuário',
-            message: 'Tem certeza que deseja remover esse usuário? Essa ação não pode ser desfeita!',
+            title  : 'Excluir perfil',
+            message: 'Tem certeza que deseja remover esse perfil? Essa ação não pode ser desfeita!',
             actions: {
                 confirm: {
                     label: 'Remover'
@@ -55,7 +51,7 @@ export class UsuarioListComponent
         confirmation.afterClosed().subscribe(async (result) => {
             if ( result === 'confirmed' ) {
                 try {
-                    await this.usuarioService.excluir(id);
+                    await this.perfilUsuarioService.excluir(id);
                     this.ngOnInit();
                     this.alertaSucesso = true;
                     setTimeout(() => {
@@ -74,23 +70,16 @@ export class UsuarioListComponent
 
     async onPageChange(event) {
 
-        let usuariosPaginados: any = await this.usuarioService.listarPaginado(event.pageIndex, event.pageSize);
-        this.usuarios = usuariosPaginados.usuarios;
-        this.pagination.length = usuariosPaginados.totalRegistros;
-        this.pagination.lastPage = Math.ceil(usuariosPaginados.totalRegistros / event.pageSize);
+        let perfisPaginados: any = await this.perfilUsuarioService.listarPaginado(event.pageIndex, event.pageSize);
+        this.perfis = perfisPaginados.perfis;
+        this.pagination.length = perfisPaginados.totalRegistros;
+        this.pagination.lastPage = Math.ceil(perfisPaginados.totalRegistros / event.pageSize);
         this.pagination.startIndex = event.pageIndex * event.pageSize + 1;
         this.pagination.endIndex = (event.pageIndex + 1) * event.pageSize;
 
     }
 
-    async listarPerfis() {
-        let perfis: any = await this.perfilUsuarioService.listar();
-        perfis.forEach(perfil => {
-            this.perfisAcessoMap.set(perfil.id, perfil);
-        });
-    }
-
-    async listarUsuariosComPaginacao() {
+    async listarPerfisComPaginacao() {
 
         this.pagination = {
             page      : 0, //Página Atual
@@ -101,10 +90,10 @@ export class UsuarioListComponent
             endIndex  : 0  //Índice do último item da página atual
         };
 
-        let usuariosPaginados: any = await this.usuarioService.listarPaginado(this.pagination.page, this.pagination.size);
-        this.usuarios = usuariosPaginados.usuarios;
-        this.pagination.length = usuariosPaginados.totalRegistros;
-        this.pagination.lastPage = Math.ceil(usuariosPaginados.totalRegistros / this.pagination.size);
+        let perfisPaginados: any = await this.perfilUsuarioService.listarPaginado(this.pagination.page, this.pagination.size);
+        this.perfis = perfisPaginados.perfis;
+        this.pagination.length = perfisPaginados.totalRegistros;
+        this.pagination.lastPage = Math.ceil(perfisPaginados.totalRegistros / this.pagination.size);
         this.pagination.startIndex = this.pagination.page * this.pagination.size + 1;
         this.pagination.endIndex = (this.pagination.page + 1) * this.pagination.size;
 

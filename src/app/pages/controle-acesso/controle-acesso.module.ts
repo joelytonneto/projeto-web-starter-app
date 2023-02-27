@@ -13,6 +13,8 @@ import { MenuListComponent } from './menu/list/menu-list.component';
 import { MenuFormComponent } from './menu/form/menu-form.component';
 import { UsuarioListComponent } from './usuario/list/usuario-list.component';
 import { UsuarioFormComponent } from './usuario/form/usuario-form.component';
+import { PerfilListComponent } from './perfil/list/perfil-list.component';
+import { PerfilFormComponent } from './perfil/form/perfil-form.component';
 import { FuseAlertModule } from '@fuse/components/alert';
 
 @NgModule({
@@ -20,7 +22,9 @@ import { FuseAlertModule } from '@fuse/components/alert';
         MenuListComponent,
         MenuFormComponent,
         UsuarioListComponent,
-        UsuarioFormComponent
+        UsuarioFormComponent,
+        PerfilListComponent,
+        PerfilFormComponent
     ],
     imports     : [
         CommonModule,
