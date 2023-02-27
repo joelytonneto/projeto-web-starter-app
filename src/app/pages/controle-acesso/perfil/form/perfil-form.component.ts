@@ -64,28 +64,36 @@ export class PerfilFormComponent
         } else {
             if(this.labelBotao == 'Salvar') {
                 try {
-                    await this.perfilUsuarioService.adicionar(this.perfilForm.value);
-                    await this.salvarMenusPerfilAcesso(this.menusPerfilAcesso, this.idPerfilUrl);
+                    let perfilCriado = await this.perfilUsuarioService.adicionar(this.perfilForm.value);                    
+                    await this.salvarMenusPerfilAcesso(this.menusPerfilAcesso, perfilCriado.id);
                     this.alertaSucesso = true;
                     this.perfilForm.disable();
                     setTimeout(() => {
                         this._router.navigate(['controle-acesso/perfis']);
-                    }, 5000);
+                    }, 2000);
                 } catch (error) {
                     console.log(error);
                     this.alertaErro = true;
                     setTimeout(() => {
                         this.alertaErro = false;
-                    }, 5000);
+                    }, 2000);
                 }
             } else if(this.labelBotao == 'Atualizar') {
-                let perfil = await this.perfilUsuarioService.atualizarById(this.perfilForm.value, this.idPerfilUrl);
-                await this.salvarMenusPerfilAcesso(this.menusPerfilAcesso, this.idPerfilUrl);
-                this.alertaSucesso = true;
-                this.perfilForm.disable();
-                setTimeout(() => {
-                    this._router.navigate(['controle-acesso/perfis']);
-                }, 5000);
+                try {
+                    let perfil = await this.perfilUsuarioService.atualizarById(this.perfilForm.value, this.idPerfilUrl);
+                    await this.salvarMenusPerfilAcesso(this.menusPerfilAcesso, this.idPerfilUrl);
+                    this.alertaSucesso = true;
+                    this.perfilForm.disable();
+                    setTimeout(() => {
+                        this._router.navigate(['controle-acesso/perfis']);
+                    }, 2000);                    
+                } catch (error) {
+                    console.log(error);
+                    this.alertaErro = true;
+                    setTimeout(() => {
+                        this.alertaErro = false;
+                    }, 2000);                    
+                }
             }
         }
 
@@ -107,41 +115,79 @@ export class PerfilFormComponent
 
     async carregarMenus() {
 
-        this.menusAtivos = await this.perfilUsuarioMenuService.listarMenusByIdPerfil(this.idPerfilUrl);
-
-        let menusLista: any = await this.menuService.listar();
-        let menus = menusLista.map(menu => {
-            return {
-                has_sub_menu: menu.has_sub_menu,
-                id: menu.id,
-                id_menu: menu.id_menu,
-                id_sistema: menu.id_sistema,
-                parent_id: menu.parent_id,
-                title: menu.title,
-                ativo: this.verificarSeMenuEstaAtivo(menu, this.menusAtivos)
-            }
-        });
-        let menusPais = menus.filter(menu => (menu.parent_id == null && menu.has_sub_menu));
-        let menusFilhos = menus.filter(menu => menu.parent_id != null);
-        let menusSemSubMenus = menus.filter(menu => !(menu.has_sub_menu) && menu.parent_id == null);
-
-        let menusFinal = [];
-
-        menusSemSubMenus.forEach(menusSemSubMenus => {
-            menusFinal.push(menusSemSubMenus);
-        });
-
-        menusPais.forEach(menuPai => {
-            menuPai.children = [];
-            menusFilhos.forEach(menuFilho => {
-              if(menuFilho.parent_id == menuPai.id_menu) {
-                menuPai.children.push(menuFilho)
-              }
+        if(this.idPerfilUrl == undefined) {
+            let menusLista: any = await this.menuService.listar();
+            let menus = menusLista.map(menu => {
+                return {
+                    has_sub_menu: menu.has_sub_menu,
+                    id: menu.id,
+                    id_menu: menu.id_menu,
+                    id_sistema: menu.id_sistema,
+                    parent_id: menu.parent_id,
+                    title: menu.title,
+                    ativo: false
+                }
             });
-            menusFinal.push(menuPai);
-        });
 
-        return menusFinal;
+            let menusPais = menus.filter(menu => (menu.parent_id == null && menu.has_sub_menu));
+            let menusFilhos = menus.filter(menu => menu.parent_id != null);
+            let menusSemSubMenus = menus.filter(menu => !(menu.has_sub_menu) && menu.parent_id == null);
+
+            let menusFinal = [];
+    
+            menusSemSubMenus.forEach(menusSemSubMenus => {
+                menusFinal.push(menusSemSubMenus);
+            });
+    
+            menusPais.forEach(menuPai => {
+                menuPai.children = [];
+                menusFilhos.forEach(menuFilho => {
+                  if(menuFilho.parent_id == menuPai.id_menu) {
+                    menuPai.children.push(menuFilho)
+                  }
+                });
+                menusFinal.push(menuPai);
+            });
+
+            return menusFinal;
+        } else {
+            this.menusAtivos = await this.perfilUsuarioMenuService.listarMenusByIdPerfil(this.idPerfilUrl);
+    
+            let menusLista: any = await this.menuService.listar();
+            let menus = menusLista.map(menu => {
+                return {
+                    has_sub_menu: menu.has_sub_menu,
+                    id: menu.id,
+                    id_menu: menu.id_menu,
+                    id_sistema: menu.id_sistema,
+                    parent_id: menu.parent_id,
+                    title: menu.title,
+                    ativo: this.verificarSeMenuEstaAtivo(menu, this.menusAtivos)
+                }
+            });
+            let menusPais = menus.filter(menu => (menu.parent_id == null && menu.has_sub_menu));
+            let menusFilhos = menus.filter(menu => menu.parent_id != null);
+            let menusSemSubMenus = menus.filter(menu => !(menu.has_sub_menu) && menu.parent_id == null);
+    
+            let menusFinal = [];
+    
+            menusSemSubMenus.forEach(menusSemSubMenus => {
+                menusFinal.push(menusSemSubMenus);
+            });
+    
+            menusPais.forEach(menuPai => {
+                menuPai.children = [];
+                menusFilhos.forEach(menuFilho => {
+                  if(menuFilho.parent_id == menuPai.id_menu) {
+                    menuPai.children.push(menuFilho)
+                  }
+                });
+                menusFinal.push(menuPai);
+            });
+    
+            return menusFinal;
+        }       
+
     }
 
     verificarSeMenuEstaAtivo(menuAVerificar, menusAtivos) {
@@ -180,8 +226,7 @@ export class PerfilFormComponent
     }
 
     async limparPerfilAcesso(idPerfilUsuario) {
-        let limparMenusPerfil = await this.perfilUsuarioMenuService.excluirPerfilUsuarioMenuByIdPerfil(idPerfilUsuario);
-        console.log(limparMenusPerfil);
+        let limparMenusPerfil = await this.perfilUsuarioMenuService.excluirPerfilUsuarioMenuByIdPerfil(idPerfilUsuario);        
         return limparMenusPerfil;
     }
 }
