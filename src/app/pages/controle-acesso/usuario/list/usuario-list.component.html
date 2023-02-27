@@ -7,95 +7,83 @@
             <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
         </div>
         <!-- Título -->
-        <div class="text-4xl font-extrabold tracking-tight">Menus</div>
+        <div class="text-4xl font-extrabold tracking-tight">Usuários</div>
         <!-- Ações -->
         <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
             <!-- Pesquisa -->
             <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
                 <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Procure os menus'">
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Procure os usuários'">
             </mat-form-field>
-            <!-- Add product button -->
-            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="novoMenu()">
+            <!-- Add usuário button -->
+            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="novoUsuario()">
                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                <span class="ml-2 mr-1">Cadastrar Novo Menu</span>
+                <span class="ml-2 mr-1">Cadastrar Novo Usuário</span>
             </button>
         </div>
     </div>
 
     <fuse-alert [type]="'success'" *ngIf="alertaSucesso">
-        <span fuseAlertTitle>Exclusão de Menu</span>
-        Menu excluído com sucesso
+        <span fuseAlertTitle>Exclusão de Usuário</span>
+        Usuário excluído com sucesso
     </fuse-alert>
     
     <fuse-alert [type]="'error'" *ngIf="alertaErro">
-        <span fuseAlertTitle>Menu não excluído</span>
-        Não foi possível a exclusão do menu, é provável que esse menu esteja associado a algum perfil de acesso
+        <span fuseAlertTitle>Usuário não excluído</span>
+        Não foi possível a exclusão do usuário
     </fuse-alert>
 
     <!-- Main -->
     <div class="flex flex-auto overflow-hidden">
 
-        <!-- Lista de Menus -->
+        <!-- Lista de Usuários -->
         <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
             
-            <ng-container *ngIf="menus.length > 0; else menusNaoEncontrados">
+            <ng-container *ngIf="usuarios.length > 0; else usuariosNaoEncontrados">
                 <div class="grid">
                     <!-- Header -->
-                    <div class="menu-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5" matSort matSortDisableClear>
-                        <div class="hidden md:block" [mat-sort-header]="'id_menu'">ID Menu</div>
-                        <div class="hidden md:block" [mat-sort-header]="'id'">Identificador</div>
-                        <div class="hidden md:block" [mat-sort-header]="'title'">Título</div>
-                        <div class="hidden md:block" [mat-sort-header]="'type'">Tipo</div>
-                        <div class="hidden md:block" [mat-sort-header]="'link'">Link</div>
-                        <div class="hidden md:block" [mat-sort-header]="'parent_id'">ID menu pai</div>
-                        <div class="hidden md:block" [mat-sort-header]="'ordem'">Ordem</div>
+                    <div class="usuario-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5" matSort matSortDisableClear>
+                        <div class="hidden md:block" [mat-sort-header]="'id'">ID</div>
+                        <div class="hidden md:block" [mat-sort-header]="'id'">Nome</div>
+                        <div class="hidden md:block" [mat-sort-header]="'title'">Usuário</div>
+                        <div class="hidden md:block" [mat-sort-header]="'type'">E-mail</div>
+                        <div class="hidden md:block" [mat-sort-header]="'link'">Perfil</div>
                         <div>Ações</div>                        
                     </div>
                     <!-- Rows -->                    
-                    <ng-container *ngFor="let menu of menus; trackBy: trackByFn">
-                        <div class="menu-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                    <ng-container *ngFor="let usuario of usuarios; trackBy: trackByFn">
+                        <div class="usuario-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 
-                            <!-- ID Menu -->
+                            <!-- ID Usuário -->
                             <div class="hidden md:block truncate">
-                                {{menu.id_menu}}
+                                {{usuario.id}}
                             </div>
 
-                            <!-- ID -->
+                            <!-- Nome -->
                             <div class="hidden md:block truncate">
-                                {{menu.id}}
+                                {{usuario.name}}
                             </div>
 
-                            <!-- Título -->
+                            <!-- Usuário -->
                             <div class="truncate">
-                                {{menu.title}}
+                                {{usuario.user}}
                             </div>
 
-                            <!-- Tipo -->
+                            <!-- E-mail -->
                             <div class="truncate">
-                                {{menu.type}}
+                                {{usuario.email}}
                             </div>
 
-                            <!-- Link -->
+                            <!-- Perfil -->
                             <div class="truncate">
-                                {{menu.link}}
-                            </div>
-
-                            <!-- Id Menu Pai -->
-                            <div class="hidden md:block truncate">
-                                {{menu.parent_id}}
-                            </div>
-
-                            <!-- Ordem -->
-                            <div class="hidden md:block truncate">
-                                {{menu.ordem}}
-                            </div>
+                                {{perfisAcessoMap.get(usuario.id_perfil_acesso).descricao}}
+                            </div>                            
 
                             <div>
                                 <button
                                     class="min-w-10 min-h-7 h-7 px-2 leading-6 mr-1"
                                     mat-stroked-button
-                                    (click)="editarMenu(menu.id_menu)">
+                                    (click)="editarUsuario(usuario.id)">
                                     <mat-icon
                                         class="icon-size-5"
                                         [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
@@ -103,14 +91,14 @@
                                 <button
                                     class="min-w-10 min-h-7 h-7 px-2 leading-6"
                                     mat-stroked-button
-                                    (click)="excluirMenu(menu.id_menu)">
+                                    (click)="excluirUsuario(usuario.id)">
                                     <mat-icon
                                         class="icon-size-5"
                                         [svgIcon]="'heroicons_solid:trash'"></mat-icon>
                                 </button>
                             </div>
 
-                        </div>
+                        </div>                        
                     </ng-container>                    
                 </div>
 
@@ -125,10 +113,10 @@
                         (page)="onPageChange($event)">
                 </mat-paginator>
 
-            </ng-container>
+            </ng-container>            
 
-            <ng-template #menusNaoEncontrados>
-                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Não existem menus cadastrados!</div>
+            <ng-template #usuariosNaoEncontrados>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Não existem usuários cadastrados!</div>
             </ng-template>
 
         </div>

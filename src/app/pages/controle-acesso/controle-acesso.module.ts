@@ -11,10 +11,17 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MenuListComponent } from './menu/list/menu-list.component';
 import { MenuFormComponent } from './menu/form/menu-form.component';
+import { UsuarioListComponent } from './usuario/list/usuario-list.component';
+import { UsuarioFormComponent } from './usuario/form/usuario-form.component';
 import { FuseAlertModule } from '@fuse/components/alert';
 
 @NgModule({
-    declarations: [ MenuListComponent, MenuFormComponent ],
+    declarations: [
+        MenuListComponent,
+        MenuFormComponent,
+        UsuarioListComponent,
+        UsuarioFormComponent
+    ],
     imports     : [
         CommonModule,
         ControleAcessoRoutingModule,

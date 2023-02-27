@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { HttpService } from '../utils/http.service';
 import { CrudInterface } from '../interfaces/crud';
 import { PerfilUsuario } from '../interfaces/perfilUsuario';
@@ -17,7 +16,7 @@ export class PerfilUsuarioService implements CrudInterface {
      * @memberof PerfilUsuarioService
      */
     public async listar(): Promise<PerfilUsuario> {
-      return await this.http.get(`${environment.apiUrl}/perfil-usuario/perfis`);
+      return await this.http.get(`perfil-usuario/perfis`);
     }
 
     /**
@@ -28,7 +27,7 @@ export class PerfilUsuarioService implements CrudInterface {
      * @memberof PerfilUsuarioService
      */
     public async atualizar(perfilUsuario: PerfilUsuario): Promise<any> {
-        return await this.http.put(`${environment.apiUrl}/perfil-usuario/perfil/${perfilUsuario.id}`, perfilUsuario);
+        return await this.http.put(`perfil-usuario/perfil/${perfilUsuario.id}`, perfilUsuario);
     }
 
     /**
@@ -39,7 +38,7 @@ export class PerfilUsuarioService implements CrudInterface {
      * @memberof PerfilUsuarioService
      */
     public async adicionar(perfilUsuario: PerfilUsuario): Promise<any> {
-      return await this.http.post(`${environment.apiUrl}/perfil-usuario/perfil`, perfilUsuario);
+      return await this.http.post(`perfil-usuario/perfil`, perfilUsuario);
     }
 
     /**
@@ -50,6 +49,6 @@ export class PerfilUsuarioService implements CrudInterface {
      * @memberof PerfilUsuarioService
      */
     public async excluir(id: number) {
-        return await this.http.delete(`${environment.apiUrl}/perfil-usuario/perfil/${id}`);
+        return await this.http.delete(`perfil-usuario/perfil/${id}`);
     }
 }

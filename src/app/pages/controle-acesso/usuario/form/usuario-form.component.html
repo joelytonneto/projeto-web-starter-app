@@ -1,0 +1,145 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+    <!-- Header -->
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+        <div class="text-3xl font-extrabold tracking-tight">Cadastro de Usuário</div>
+    </div>  
+    
+    <fuse-alert [type]="'success'" *ngIf="alertaSucesso">
+        <span fuseAlertTitle>Usuário Inserido/Atualizado com sucesso</span>
+        Você será direcionado para a lista de usuários cadastrados
+    </fuse-alert>
+
+    <fuse-alert [type]="'error'" *ngIf="alertaErro">
+        <span fuseAlertTitle>Falha ao inserir/atualizar Usuário</span>
+        Ops! Não foi possível inserir ou atualizar o usuário, por favor verifique o log de erro
+    </fuse-alert>
+
+    <fuse-alert [type]="'error'" *ngIf="alertaErroFormulario">
+        <span fuseAlertTitle>Informações Formulário</span>
+        Ops! Existem informações obrigatórias a serem preenchidas no formulário, preencha e depois tente salvar novamente
+    </fuse-alert>
+
+    <!-- Main -->
+    <div class="flex flex-col overflow-hidden">
+        <form class="flex flex-col mt-4 px-8 pt-10 bg-card shadow rounded overflow-hidden" [formGroup]="usuarioForm">
+            <div class="flex flex-col gt-xs:flex-row gt-xs:items-start">
+                <div class="flex">
+                    <mat-form-field class="flex-col-6 mr-4" *ngIf="labelBotao == 'Atualizar'">
+                        <mat-label>ID</mat-label>
+                        <input 
+                            matInput
+                            [formControlName]="'id'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                    <!-- <mat-checkbox class="mb-4"
+                            [formControlName]="'ativo'"
+                            [labelPosition]="'after'"
+                            [color]="'primary'"
+                        >
+                            Ativo?
+                    </mat-checkbox> -->
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Nome</mat-label>
+                        <input 
+                            matInput
+                            [formControlName]="'name'"
+                            [placeholder]="'Informe o nome do usuário'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto ml-4">
+                        <mat-label>Usuário</mat-label>
+                        <input
+                            matInput
+                            [formControlName]="'user'"
+                            [placeholder]="'Informe o nome do usuário'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto ml-4">
+                        <mat-label>Avatar</mat-label>
+                        <input
+                            matInput
+                            [formControlName]="'avatar'"
+                            [placeholder]="'Informe o caminho da imagem do avatar do usuário'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Status</mat-label>
+                        <input
+                            matInput
+                            [formControlName]="'status'"
+                            [placeholder]="'Informe o status do usuário'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto ml-4">
+                        <mat-label>E-mail</mat-label>
+                        <input
+                            matInput
+                            [formControlName]="'email'"
+                            [placeholder]="'Informe o e-mail do usuário'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto ml-4">
+                        <mat-label>Senha</mat-label>
+                        <input
+                            type="password"
+                            matInput
+                            [formControlName]="'password'"
+                            [placeholder]="'Informe a senha do usuário'"
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Perfil</mat-label>
+                        <mat-select
+                            [formControlName]="'id_perfil_acesso'"
+                            [placeholder]="'Selecione o perfil do usuário'"
+                        >
+                            <mat-option *ngFor="let perfil of perfis;" [value]=perfil.id>{{ perfil.descricao }}</mat-option>
+                        </mat-select>
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                </div>
+
+                <div class="flex" *ngIf="labelBotao == 'Atualizar'">                    
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Criado em:</mat-label>
+                        <input
+                            matInput
+                            [formControlName]="'createdAt'"                            
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                    <mat-form-field class="flex-auto ml-4">
+                        <mat-label>Atualizado em:</mat-label>
+                        <input
+                            matInput
+                            [formControlName]="'updatedAt'"                            
+                        >
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    </mat-form-field>
+                </div>
+
+                <div class="flex items-center justify-end">
+                    <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="cadastrarAtualizarUsuario()">
+                        {{ labelBotao }}
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>

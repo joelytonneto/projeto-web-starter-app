@@ -1,0 +1,15 @@
+.usuario-grid {
+      grid-template-columns: 11% 17% 16% 23% 21% 12%;
+
+  @screen sm {
+            grid-template-columns: 11% 17% 16% 23% 21% 12%;
+  }
+
+  @screen md {
+            grid-template-columns: 11% 17% 16% 23% 21% 12%;
+  }
+
+  @screen lg {
+            grid-template-columns: 11% 17% 16% 23% 21% 12%;
+  }
+}

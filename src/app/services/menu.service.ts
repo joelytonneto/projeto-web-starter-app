@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { CrudInterface } from '../interfaces/crud'
 import { Menu } from '../interfaces/menu';
 import { HttpService } from '../utils/http.service';
