@@ -26,9 +26,7 @@ export class MenuListComponent
                 private _fuseConfirmationService: FuseConfirmationService){}
 
     async ngOnInit() {
-        this.pagination = [];
-
-        this.menus = await this.menuService.listar();        
+        this.listarMenusComPaginacao();
     }
 
     novoMenu() {
@@ -68,5 +66,36 @@ export class MenuListComponent
                 }
             }
         });
+    }
+
+    async onPageChange(event) {
+        
+        let menusPaginados: any = await this.menuService.listarPaginado(event.pageIndex, event.pageSize);
+        this.menus = menusPaginados.menus;        
+        this.pagination.length = menusPaginados.totalRegistros;
+        this.pagination.lastPage = Math.ceil(menusPaginados.totalRegistros / event.pageSize);
+        this.pagination.startIndex = event.pageIndex * event.pageSize + 1;
+        this.pagination.endIndex = (event.pageIndex + 1) * event.pageSize;
+
+    }
+
+    async listarMenusComPaginacao() {
+
+        this.pagination = {
+            page      : 0, //Página Atual
+            size      : 5, //Quantidade de Itens por Página
+            length    : 0, //Total de Registros
+            lastPage  : 0, //O Número da última página
+            startIndex: 0, //Índice do primeiro item da página atual
+            endIndex  : 0  //Índice do último item da página atual
+        };
+
+        let menusPaginados: any = await this.menuService.listarPaginado(this.pagination.page, this.pagination.size);
+        this.menus = menusPaginados.menus;        
+        this.pagination.length = menusPaginados.totalRegistros;
+        this.pagination.lastPage = Math.ceil(menusPaginados.totalRegistros / this.pagination.size);
+        this.pagination.startIndex = this.pagination.page * this.pagination.size + 1;
+        this.pagination.endIndex = (this.pagination.page + 1) * this.pagination.size;
+
     }
 }

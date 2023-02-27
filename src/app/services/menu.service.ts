@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { CrudInterface } from '../interfaces/crud'
@@ -23,6 +24,19 @@ export class MenuService implements CrudInterface {
      */
     public async buscarPorId(idMenu): Promise<Menu> {
         return await this.http.get(`menu/menus/${idMenu}`);
+    }
+
+    /**
+     * Endpoint responsável por listar todos os menus
+     *
+     * @return {*} {Promise<Array<Menu>>}
+     * @memberof MenuService
+     */
+    public async listarPaginado(pagina: number, totalItensPagina: number): Promise<Array<Menu>> {
+        const params = new HttpParams()
+            .set('page', pagina.toString())
+            .set('size', totalItensPagina.toString());
+        return await this.http.get(`menu/menus-paginado`, { params });
     }
     
     /**
