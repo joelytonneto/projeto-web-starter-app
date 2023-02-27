@@ -82,15 +82,39 @@
                         <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
                     </mat-form-field>
                 </div>
+            </div>
+        </form>
 
-                <div class="flex items-center justify-end">
+        <div class="flex flex-col px-8 bg-card shadow rounded overflow-hidden">
+            <div class="flex flex-col gt-xs:flex-row gt-xs:items-start">
+                <h2>Menus:</h2>
+                <div class="flex mt-1 mb-1" *ngFor="let menu of menusPerfilAcesso;">
+                    <mat-expansion-panel class="flex-auto" #panelMenus hideToggle>
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            {{ menu.title }}
+                          </mat-panel-title>
+                          <mat-slide-toggle
+                                [(ngModel)]="menu.ativo"
+                                [color]="'primary'">
+                          </mat-slide-toggle>
+                          <mat-icon >{{panelMenus.expanded? 'expand_less' : 'expand_more'}}</mat-icon>
+                        </mat-expansion-panel-header>
+                        <div class="mb-2" *ngFor="let menuFilho of menu.children">
+                            <mat-slide-toggle
+                                [(ngModel)]="menuFilho.ativo"
+                                [color]="'primary'">
+                                {{ menuFilho.title }}
+                            </mat-slide-toggle>
+                        </div>
+                    </mat-expansion-panel>
+                </div>
+                <div class="flex pt-4 items-center justify-end">
                     <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="cadastrarAtualizarPerfil()">
                         {{ labelBotao }}
                     </button>
                 </div>
-
             </div>
-        </form>
+        </div>
     </div>
-
 </div>
