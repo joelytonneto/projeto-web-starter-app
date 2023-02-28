@@ -54,6 +54,16 @@ export class AuthInterceptor implements HttpInterceptor
                     location.reload();
                 }
 
+                // Catch "403 Unauthorized" responses "Usuário não tem permissão para acessar esta rota"
+                if ( error instanceof HttpErrorResponse && error.status === 403 )
+                {
+                    // Sign out
+                    this._authService.signOut();
+
+                    // Reload the app
+                    location.reload();
+                }
+
                 return throwError(error);
             })
         );
