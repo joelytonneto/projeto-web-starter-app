@@ -13,14 +13,15 @@ import { MenuService } from 'app/services/menu.service';
 })
 export class MenuListComponent
 {
+    pesquisaMenu: string = '';
     alertaSucesso = false;
     alertaErro = false;
-    isLoading = false;
-    searchInputControl: UntypedFormControl = new UntypedFormControl();
+    isLoading = false;    
 
     pagination: any;
 
     menus: Array<Menu> = [];
+    menusCopia: Array<Menu> = [];
     constructor(private menuService: MenuService,                
                 private _router: Router,
                 private _fuseConfirmationService: FuseConfirmationService){}
@@ -71,7 +72,8 @@ export class MenuListComponent
     async onPageChange(event) {
         
         let menusPaginados: any = await this.menuService.listarPaginado(event.pageIndex, event.pageSize);
-        this.menus = menusPaginados.menus;        
+        this.menus = menusPaginados.menus;
+        this.menusCopia = menusPaginados.menus;
         this.pagination.length = menusPaginados.totalRegistros;
         this.pagination.lastPage = Math.ceil(menusPaginados.totalRegistros / event.pageSize);
         this.pagination.startIndex = event.pageIndex * event.pageSize + 1;
@@ -91,11 +93,21 @@ export class MenuListComponent
         };
 
         let menusPaginados: any = await this.menuService.listarPaginado(this.pagination.page, this.pagination.size);
-        this.menus = menusPaginados.menus;        
+        this.menus = menusPaginados.menus;
+        this.menusCopia = menusPaginados.menus;
         this.pagination.length = menusPaginados.totalRegistros;
         this.pagination.lastPage = Math.ceil(menusPaginados.totalRegistros / this.pagination.size);
         this.pagination.startIndex = this.pagination.page * this.pagination.size + 1;
         this.pagination.endIndex = (this.pagination.page + 1) * this.pagination.size;
 
+    }
+
+    pesquisarMenus(pesquisa) {
+        this.menus = this.menusCopia;
+        this.menus = this.menus.filter(menu => {
+            if(menu.title.toLowerCase().includes(pesquisa.toLowerCase())) {
+                return menu;
+            };
+        });
     }
 }

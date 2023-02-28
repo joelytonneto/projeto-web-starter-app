@@ -13,14 +13,16 @@ import { PerfilUsuarioService } from 'app/services/perfilUsuario.service';
 })
 export class PerfilListComponent
 {
+    pesquisaPerfil: string = '';
+
     alertaSucesso = false;
     alertaErro = false;
-    isLoading = false;
-    searchInputControl: UntypedFormControl = new UntypedFormControl();
+    isLoading = false;    
 
     pagination: any;
 
     perfis: Array<PerfilUsuario> = [];
+    perfisCopia: Array<PerfilUsuario> = [];
     constructor(private perfilUsuarioService: PerfilUsuarioService,
                 private _router: Router,
                 private _fuseConfirmationService: FuseConfirmationService){}
@@ -72,6 +74,7 @@ export class PerfilListComponent
 
         let perfisPaginados: any = await this.perfilUsuarioService.listarPaginado(event.pageIndex, event.pageSize);
         this.perfis = perfisPaginados.perfis;
+        this.perfisCopia = perfisPaginados.perfis;
         this.pagination.length = perfisPaginados.totalRegistros;
         this.pagination.lastPage = Math.ceil(perfisPaginados.totalRegistros / event.pageSize);
         this.pagination.startIndex = event.pageIndex * event.pageSize + 1;
@@ -92,10 +95,20 @@ export class PerfilListComponent
 
         let perfisPaginados: any = await this.perfilUsuarioService.listarPaginado(this.pagination.page, this.pagination.size);
         this.perfis = perfisPaginados.perfis;
+        this.perfisCopia = perfisPaginados.perfis;
         this.pagination.length = perfisPaginados.totalRegistros;
         this.pagination.lastPage = Math.ceil(perfisPaginados.totalRegistros / this.pagination.size);
         this.pagination.startIndex = this.pagination.page * this.pagination.size + 1;
         this.pagination.endIndex = (this.pagination.page + 1) * this.pagination.size;
 
+    }
+
+    pesquisarPerfis(pesquisa) {
+        this.perfis = this.perfisCopia;
+        this.perfis = this.perfis.filter(perfil => {
+            if(perfil.descricao.toLowerCase().includes(pesquisa.toLowerCase())) {
+                return perfil;
+            };
+        });
     }
 }

@@ -14,6 +14,8 @@ import { PerfilUsuarioService } from 'app/services/perfilUsuario.service';
 })
 export class UsuarioListComponent
 {
+    pesquisaUsuario: string = '';
+
     perfisAcessoMap = new Map();
     alertaSucesso = false;
     alertaErro = false;
@@ -23,6 +25,7 @@ export class UsuarioListComponent
     pagination: any;
 
     usuarios: Array<Usuario> = [];
+    usuariosCopia: Array<Usuario> = [];
     constructor(private usuarioService: UsuarioService,
                 private perfilUsuarioService: PerfilUsuarioService,
                 private _router: Router,
@@ -76,6 +79,7 @@ export class UsuarioListComponent
 
         let usuariosPaginados: any = await this.usuarioService.listarPaginado(event.pageIndex, event.pageSize);
         this.usuarios = usuariosPaginados.usuarios;
+        this.usuariosCopia = usuariosPaginados.usuarios;        
         this.pagination.length = usuariosPaginados.totalRegistros;
         this.pagination.lastPage = Math.ceil(usuariosPaginados.totalRegistros / event.pageSize);
         this.pagination.startIndex = event.pageIndex * event.pageSize + 1;
@@ -103,10 +107,20 @@ export class UsuarioListComponent
 
         let usuariosPaginados: any = await this.usuarioService.listarPaginado(this.pagination.page, this.pagination.size);
         this.usuarios = usuariosPaginados.usuarios;
+        this.usuariosCopia = usuariosPaginados.usuarios;
         this.pagination.length = usuariosPaginados.totalRegistros;
         this.pagination.lastPage = Math.ceil(usuariosPaginados.totalRegistros / this.pagination.size);
         this.pagination.startIndex = this.pagination.page * this.pagination.size + 1;
         this.pagination.endIndex = (this.pagination.page + 1) * this.pagination.size;
 
+    }    
+
+    pesquisarUsuarios(pesquisa) {
+        this.usuarios = this.usuariosCopia;
+        this.usuarios = this.usuarios.filter(usuario => {
+            if(usuario.name.toLowerCase().includes(pesquisa.toLowerCase())) {
+                return usuario;
+            };
+        });
     }
 }

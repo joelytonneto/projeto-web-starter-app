@@ -13,7 +13,7 @@
             <!-- Pesquisa -->
             <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
                 <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Procure os usuários'">
+                <input matInput [(ngModel)]="pesquisaUsuario" (input)="pesquisarUsuarios(pesquisaUsuario)" [autocomplete]="'off'" [placeholder]="'Procure os usuários'">
             </mat-form-field>
             <!-- Add usuário button -->
             <button class="ml-4" mat-flat-button [color]="'primary'" (click)="novoUsuario()">
